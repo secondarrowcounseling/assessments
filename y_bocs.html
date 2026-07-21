@@ -1,0 +1,337 @@
+import React, { useState } from 'react';
+import { RotateCcw, AlertCircle, CheckCircle2 } from 'lucide-react';
+
+const QUESTIONS = [
+  // Obsessions (1-5)
+  {
+    id: 1,
+    category: 'Obsessions',
+    title: 'Time Occupied by Obsessive Thoughts',
+    description: 'How much time is occupied by intrusive or obsessive thoughts?',
+    options: [
+      { value: 0, label: 'None', desc: '0 hrs/day' },
+      { value: 1, label: 'Mild', desc: 'Less than 1 hr/day' },
+      { value: 2, label: 'Moderate', desc: '1 to 3 hrs/day' },
+      { value: 3, label: 'Severe', desc: '3 to 8 hrs/day' },
+      { value: 4, label: 'Extreme', desc: 'Greater than 8 hrs/day' }
+    ]
+  },
+  {
+    id: 2,
+    category: 'Obsessions',
+    title: 'Interference due to Obsessive Thoughts',
+    description: 'How much do your obsessive thoughts interfere with daily life and functioning?',
+    options: [
+      { value: 0, label: 'None', desc: 'No interference' },
+      { value: 1, label: 'Mild', desc: 'Slight interference, manageable' },
+      { value: 2, label: 'Moderate', desc: 'Definite interference with getting things done' },
+      { value: 3, label: 'Severe', desc: 'Substantial impairment' },
+      { value: 4, label: 'Extreme', desc: 'Incapacitating' }
+    ]
+  },
+  {
+    id: 3,
+    category: 'Obsessions',
+    title: 'Distress Associated with Obsessive Thoughts',
+    description: 'How much distress or inner tension do your obsessive thoughts cause?',
+    options: [
+      { value: 0, label: 'None', desc: 'No distress' },
+      { value: 1, label: 'Mild', desc: 'Infrequent, not troubling' },
+      { value: 2, label: 'Moderate', desc: 'Frequent, disturbing, but manageable' },
+      { value: 3, label: 'Severe', desc: 'Very disturbing, frequent' },
+      { value: 4, label: 'Extreme', desc: 'Near constant, disabling distress' }
+    ]
+  },
+  {
+    id: 4,
+    category: 'Obsessions',
+    title: 'Resistance against Obsessions',
+    description: 'How much effort do you make to redirect or resist obsessive thoughts?',
+    options: [
+      { value: 0, label: 'Always Resist', desc: 'Effort is always made to redirect' },
+      { value: 1, label: 'Much Resistance', desc: 'Tries to redirect most of the time' },
+      { value: 2, label: 'Some Resistance', desc: 'Makes some effort to redirect' },
+      { value: 3, label: 'Yields to All', desc: 'Yields without attempt to control' },
+      { value: 4, label: 'Completely Yields', desc: 'Completely yields to all thoughts' }
+    ]
+  },
+  {
+    id: 5,
+    category: 'Obsessions',
+    title: 'Control over Obsessive Thoughts',
+    description: 'How much control do you have over redirecting your obsessive thoughts?',
+    options: [
+      { value: 0, label: 'Complete Control', desc: 'Can dismiss thoughts easily' },
+      { value: 1, label: 'Much Control', desc: 'Can divert attention with effort' },
+      { value: 2, label: 'Moderate Control', desc: 'Can divert attention with difficulty' },
+      { value: 3, label: 'Little Control', desc: 'Rarely successful in diverting' },
+      { value: 4, label: 'No Control', desc: 'Involuntary, unable to divert' }
+    ]
+  },
+  // Compulsions (6-10)
+  {
+    id: 6,
+    category: 'Compulsions',
+    title: 'Time Spent Performing Compulsive Behaviors',
+    description: 'How much time do you spend performing compulsive behaviors or rituals?',
+    options: [
+      { value: 0, label: 'None', desc: '0 hrs/day' },
+      { value: 1, label: 'Mild', desc: 'Less than 1 hr/day' },
+      { value: 2, label: 'Moderate', desc: '1 to 3 hrs/day' },
+      { value: 3, label: 'Severe', desc: '3 to 8 hrs/day' },
+      { value: 4, label: 'Extreme', desc: 'Greater than 8 hrs/day' }
+    ]
+  },
+  {
+    id: 7,
+    category: 'Compulsions',
+    title: 'Interference due to Compulsive Behaviors',
+    description: 'How much do compulsive behaviors interfere with daily activities?',
+    options: [
+      { value: 0, label: 'None', desc: 'No interference' },
+      { value: 1, label: 'Mild', desc: 'Slight interference, manageable' },
+      { value: 2, label: 'Moderate', desc: 'Definite interference with performance' },
+      { value: 3, label: 'Severe', desc: 'Substantial impairment' },
+      { value: 4, label: 'Extreme', desc: 'Incapacitating' }
+    ]
+  },
+  {
+    id: 8,
+    category: 'Compulsions',
+    title: 'Distress if Compulsions Prevented',
+    description: 'How anxious or distressed would you feel if prevented from performing compulsions?',
+    options: [
+      { value: 0, label: 'None', desc: 'No anxiety' },
+      { value: 1, label: 'Mild', desc: 'Slight anxiety, easily managed' },
+      { value: 2, label: 'Moderate', desc: 'Moderate, manageable anxiety' },
+      { value: 3, label: 'Severe', desc: 'Prominent and disturbing anxiety' },
+      { value: 4, label: 'Extreme', desc: 'Disabling anxiety' }
+    ]
+  },
+  {
+    id: 9,
+    category: 'Compulsions',
+    title: 'Resistance against Compulsions',
+    description: 'How much effort do you make to resist or delay performing compulsions?',
+    options: [
+      { value: 0, label: 'Always Resist', desc: 'Effort is always made to resist' },
+      { value: 1, label: 'Much Resistance', desc: 'Tries to resist most of the time' },
+      { value: 2, label: 'Some Resistance', desc: 'Makes some effort to resist' },
+      { value: 3, label: 'Yields to All', desc: 'Yields without attempt to control' },
+      { value: 4, label: 'Completely Yields', desc: 'Completely yields to all compulsions' }
+    ]
+  },
+  {
+    id: 10,
+    category: 'Compulsions',
+    title: 'Control over Compulsive Behaviors',
+    description: 'How strong is the drive to perform compulsive behaviors?',
+    options: [
+      { value: 0, label: 'Complete Control', desc: 'Full control over behavior' },
+      { value: 1, label: 'Much Control', desc: 'Can delay behavior with effort' },
+      { value: 2, label: 'Moderate Control', desc: 'Can delay only with great difficulty' },
+      { value: 3, label: 'Little Control', desc: 'Rarely able to delay behavior' },
+      { value: 4, label: 'No Control', desc: 'Involuntary drive to perform' }
+    ]
+  }
+];
+
+export default function YbocsCalculator() {
+  const [answers, setAnswers] = useState(
+    QUESTIONS.reduce((acc, q) => ({ ...acc, [q.id]: 0 }), {})
+  );
+
+  const handleSelect = (id, value) => {
+    setAnswers(prev => ({ ...prev, [id]: value }));
+  };
+
+  const resetCalculator = () => {
+    setAnswers(QUESTIONS.reduce((acc, q) => ({ ...acc, [q.id]: 0 }), {}));
+  };
+
+  const obsessionScore = QUESTIONS.filter(q => q.category === 'Obsessions')
+    .reduce((sum, q) => sum + (answers[q.id] || 0), 0);
+
+  const compulsionScore = QUESTIONS.filter(q => q.category === 'Compulsions')
+    .reduce((sum, q) => sum + (answers[q.id] || 0), 0);
+
+  const totalScore = obsessionScore + compulsionScore;
+
+  const getSeverity = (score) => {
+    if (score <= 7) return { label: 'Subclinical / Low Range', color: '#45735d' }; // Forest Green
+    if (score <= 15) return { label: 'Mild Range', color: '#ba945e' }; // Warm Gold
+    if (score <= 23) return { label: 'Moderate Range', color: '#b68d76' }; // Terracotta
+    if (score <= 31) return { label: 'Severe Range', color: '#8c5946' }; // Deep Terracotta
+    return { label: 'Extreme Range', color: '#35361c' }; // Dark Forest
+  };
+
+  const severity = getSeverity(totalScore);
+
+  return (
+    <div 
+      className="min-h-screen text-[#222a26] p-4 md:p-8"
+      style={{ 
+        backgroundColor: '#faf8f5', 
+        fontFamily: "'Nunito Sans', sans-serif" 
+      }}
+    >
+      {/* Google Fonts Preload */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Nunito+Sans:wght@400;600;700;800&display=display');
+        .font-serif-sac { font-family: 'Libre Baskerville', serif; }
+      `}</style>
+
+      {/* Second Arrow Counseling Topbar Link */}
+      <div className="max-w-[1100px] mx-auto mb-4 flex items-center justify-between border-b pb-2" style={{ borderColor: '#bdb7a2' }}>
+        <a 
+          href="https://www.secondarrow.net" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="font-serif-sac text-sm font-bold tracking-wide transition-opacity hover:opacity-80"
+          style={{ color: '#35361c' }}
+        >
+          Second Arrow Counseling
+        </a>
+        <span className="text-xs" style={{ color: '#6d7873' }}>Clinical Tools Suite</span>
+      </div>
+
+      <div className="max-w-[1100px] mx-auto">
+        {/* Header Panel */}
+        <div 
+          className="p-6 md:p-8 rounded-2xl mb-6 shadow-sm border flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+          style={{ backgroundColor: '#F5F3EF', borderColor: '#bdb7a2' }}
+        >
+          <div>
+            <h1 className="font-serif-sac text-2xl md:text-3xl font-bold" style={{ color: '#35361c' }}>
+              Yale-Brown Obsessive Compulsive Scale (Y-BOCS)
+            </h1>
+            <p className="text-sm mt-2 max-w-2xl leading-relaxed" style={{ color: '#6d7873' }}>
+              A 10-item assessment measuring the presence, duration, and energetic impact of intrusive thoughts and compulsive behaviors over the past 7 days.
+            </p>
+          </div>
+          <button
+            onClick={resetCalculator}
+            className="flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all border"
+            style={{ 
+              backgroundColor: '#faf8f5', 
+              color: '#35361c', 
+              borderColor: '#bdb7a2' 
+            }}
+          >
+            <RotateCcw className="w-3.5 h-3.5" /> Reset Form
+          </button>
+        </div>
+
+        {/* Dynamic Summary Card (Sticky) */}
+        <div 
+          className="sticky top-4 z-10 p-6 rounded-2xl shadow-md mb-8 border"
+          style={{ backgroundColor: '#35361c', borderColor: '#35361c', color: '#faf8f5' }}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
+            <div>
+              <span className="text-xs uppercase tracking-wider font-semibold opacity-80">Total Severity Score</span>
+              <div className="text-3xl font-extrabold mt-1">
+                {totalScore} <span className="text-base font-normal opacity-60">/ 40</span>
+              </div>
+            </div>
+            <div>
+              <span className="text-xs uppercase tracking-wider font-semibold opacity-80">Obsessions Subscore</span>
+              <div className="text-2xl font-bold mt-1" style={{ color: '#b68d76' }}>
+                {obsessionScore} <span className="text-sm font-normal text-white opacity-60">/ 20</span>
+              </div>
+            </div>
+            <div>
+              <span className="text-xs uppercase tracking-wider font-semibold opacity-80">Compulsions Subscore</span>
+              <div className="text-2xl font-bold mt-1" style={{ color: '#ba945e' }}>
+                {compulsionScore} <span className="text-sm font-normal text-white opacity-60">/ 20</span>
+              </div>
+            </div>
+            <div className="md:border-l md:border-[#6d7873] md:pl-6">
+              <span className="text-xs uppercase tracking-wider font-semibold opacity-80">Clinical Impact</span>
+              <div 
+                className="mt-2 inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full"
+                style={{ backgroundColor: severity.color, color: '#faf8f5' }}
+              >
+                {severity.label}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Questions Grid */}
+        <div className="space-y-6">
+          {QUESTIONS.map((q) => (
+            <div 
+              key={q.id} 
+              className="p-6 rounded-2xl shadow-sm border transition-shadow"
+              style={{ backgroundColor: '#ffffff', borderColor: '#bdb7a2' }}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span 
+                  className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded"
+                  style={{ 
+                    backgroundColor: q.category === 'Obsessions' ? '#F5F3EF' : '#faf8f5', 
+                    color: q.category === 'Obsessions' ? '#b68d76' : '#ba945e',
+                    border: `1px solid ${q.category === 'Obsessions' ? '#b68d76' : '#ba945e'}`
+                  }}
+                >
+                  Item {q.id}: {q.category}
+                </span>
+                <span className="text-xs font-semibold" style={{ color: '#6d7873' }}>
+                  Score: {answers[q.id]}
+                </span>
+              </div>
+
+              <h2 className="font-serif-sac text-lg font-bold mt-1" style={{ color: '#35361c' }}>
+                {q.title}
+              </h2>
+              <p className="text-xs mb-4" style={{ color: '#6d7873' }}>
+                {q.description}
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-5 gap-2.5">
+                {q.options.map((opt) => {
+                  const isSelected = answers[q.id] === opt.value;
+                  const primaryColor = q.category === 'Obsessions' ? '#b68d76' : '#ba945e';
+                  return (
+                    <button
+                      key={opt.value}
+                      onClick={() => handleSelect(q.id, opt.value)}
+                      className="p-3 text-left rounded-xl border transition-all text-xs flex flex-col justify-between"
+                      style={{
+                        backgroundColor: isSelected ? '#F5F3EF' : '#faf8f5',
+                        borderColor: isSelected ? primaryColor : '#bdb7a2',
+                        boxShadow: isSelected ? `0 0 0 1px ${primaryColor}` : 'none'
+                      }}
+                    >
+                      <div className="flex items-center justify-between w-full mb-1">
+                        <span className="font-bold" style={{ color: isSelected ? '#35361c' : '#6d7873' }}>
+                          {opt.value} - {opt.label}
+                        </span>
+                        {isSelected && <CheckCircle2 className="w-3.5 h-3.5 shrink-0" style={{ color: primaryColor }} />}
+                      </div>
+                      <span className="text-[11px] leading-snug" style={{ color: '#6d7873' }}>
+                        {opt.desc}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Standard Disclaimer */}
+        <div 
+          className="mt-10 p-5 rounded-2xl border text-xs flex items-start gap-3.5 leading-relaxed"
+          style={{ backgroundColor: '#F5F3EF', borderColor: '#bdb7a2', color: '#6d7873' }}
+        >
+          <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#b68d76' }} />
+          <div>
+            <strong style={{ color: '#35361c' }}>Disclaimer:</strong> This tool is intended for psychoeducational purposes only[cite: 1]. It does not constitute medical advice, diagnosis, or treatment[cite: 1]. The information presented is a simplified representation of complex neurobiological processes and should not replace consultation with a licensed healthcare or mental health professional[cite: 1].
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
