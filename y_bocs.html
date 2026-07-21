@@ -1,337 +1,613 @@
-import React, { useState } from 'react';
-import { RotateCcw, AlertCircle, CheckCircle2 } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title">Y-BOCS Assessment Tool | Second Arrow Counseling</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Second Arrow Counseling Design System */
+    :root {
+      --green:     #45735d;  /* Forest Green / NT */
+      --gold:      #ba945e;  /* Warm Gold / Autism */
+      --terra:     #b68d76;  /* Terracotta / ADHD */
+      --forest:    #35361c;  /* Dark Forest / AuDHD */
+      --text:      #222a26;  /* Primary Text */
+      --grey:      #6d7873;  /* Warm Grey / Body Labels */
+      --bg:        #faf8f5;  /* Page Background */
+      --accent-bg: #F5F3EF;  /* Panel Background */
+      --stone:     #bdb7a2;  /* Borders & Dividers */
+      --cool-grey: #a6aea6;
+    }
 
-const QUESTIONS = [
-  // Obsessions (1-5)
-  {
-    id: 1,
-    category: 'Obsessions',
-    title: 'Time Occupied by Obsessive Thoughts',
-    description: 'How much time is occupied by intrusive or obsessive thoughts?',
-    options: [
-      { value: 0, label: 'None', desc: '0 hrs/day' },
-      { value: 1, label: 'Mild', desc: 'Less than 1 hr/day' },
-      { value: 2, label: 'Moderate', desc: '1 to 3 hrs/day' },
-      { value: 3, label: 'Severe', desc: '3 to 8 hrs/day' },
-      { value: 4, label: 'Extreme', desc: 'Greater than 8 hrs/day' }
-    ]
-  },
-  {
-    id: 2,
-    category: 'Obsessions',
-    title: 'Interference due to Obsessive Thoughts',
-    description: 'How much do your obsessive thoughts interfere with daily life and functioning?',
-    options: [
-      { value: 0, label: 'None', desc: 'No interference' },
-      { value: 1, label: 'Mild', desc: 'Slight interference, manageable' },
-      { value: 2, label: 'Moderate', desc: 'Definite interference with getting things done' },
-      { value: 3, label: 'Severe', desc: 'Substantial impairment' },
-      { value: 4, label: 'Extreme', desc: 'Incapacitating' }
-    ]
-  },
-  {
-    id: 3,
-    category: 'Obsessions',
-    title: 'Distress Associated with Obsessive Thoughts',
-    description: 'How much distress or inner tension do your obsessive thoughts cause?',
-    options: [
-      { value: 0, label: 'None', desc: 'No distress' },
-      { value: 1, label: 'Mild', desc: 'Infrequent, not troubling' },
-      { value: 2, label: 'Moderate', desc: 'Frequent, disturbing, but manageable' },
-      { value: 3, label: 'Severe', desc: 'Very disturbing, frequent' },
-      { value: 4, label: 'Extreme', desc: 'Near constant, disabling distress' }
-    ]
-  },
-  {
-    id: 4,
-    category: 'Obsessions',
-    title: 'Resistance against Obsessions',
-    description: 'How much effort do you make to redirect or resist obsessive thoughts?',
-    options: [
-      { value: 0, label: 'Always Resist', desc: 'Effort is always made to redirect' },
-      { value: 1, label: 'Much Resistance', desc: 'Tries to redirect most of the time' },
-      { value: 2, label: 'Some Resistance', desc: 'Makes some effort to redirect' },
-      { value: 3, label: 'Yields to All', desc: 'Yields without attempt to control' },
-      { value: 4, label: 'Completely Yields', desc: 'Completely yields to all thoughts' }
-    ]
-  },
-  {
-    id: 5,
-    category: 'Obsessions',
-    title: 'Control over Obsessive Thoughts',
-    description: 'How much control do you have over redirecting your obsessive thoughts?',
-    options: [
-      { value: 0, label: 'Complete Control', desc: 'Can dismiss thoughts easily' },
-      { value: 1, label: 'Much Control', desc: 'Can divert attention with effort' },
-      { value: 2, label: 'Moderate Control', desc: 'Can divert attention with difficulty' },
-      { value: 3, label: 'Little Control', desc: 'Rarely successful in diverting' },
-      { value: 4, label: 'No Control', desc: 'Involuntary, unable to divert' }
-    ]
-  },
-  // Compulsions (6-10)
-  {
-    id: 6,
-    category: 'Compulsions',
-    title: 'Time Spent Performing Compulsive Behaviors',
-    description: 'How much time do you spend performing compulsive behaviors or rituals?',
-    options: [
-      { value: 0, label: 'None', desc: '0 hrs/day' },
-      { value: 1, label: 'Mild', desc: 'Less than 1 hr/day' },
-      { value: 2, label: 'Moderate', desc: '1 to 3 hrs/day' },
-      { value: 3, label: 'Severe', desc: '3 to 8 hrs/day' },
-      { value: 4, label: 'Extreme', desc: 'Greater than 8 hrs/day' }
-    ]
-  },
-  {
-    id: 7,
-    category: 'Compulsions',
-    title: 'Interference due to Compulsive Behaviors',
-    description: 'How much do compulsive behaviors interfere with daily activities?',
-    options: [
-      { value: 0, label: 'None', desc: 'No interference' },
-      { value: 1, label: 'Mild', desc: 'Slight interference, manageable' },
-      { value: 2, label: 'Moderate', desc: 'Definite interference with performance' },
-      { value: 3, label: 'Severe', desc: 'Substantial impairment' },
-      { value: 4, label: 'Extreme', desc: 'Incapacitating' }
-    ]
-  },
-  {
-    id: 8,
-    category: 'Compulsions',
-    title: 'Distress if Compulsions Prevented',
-    description: 'How anxious or distressed would you feel if prevented from performing compulsions?',
-    options: [
-      { value: 0, label: 'None', desc: 'No anxiety' },
-      { value: 1, label: 'Mild', desc: 'Slight anxiety, easily managed' },
-      { value: 2, label: 'Moderate', desc: 'Moderate, manageable anxiety' },
-      { value: 3, label: 'Severe', desc: 'Prominent and disturbing anxiety' },
-      { value: 4, label: 'Extreme', desc: 'Disabling anxiety' }
-    ]
-  },
-  {
-    id: 9,
-    category: 'Compulsions',
-    title: 'Resistance against Compulsions',
-    description: 'How much effort do you make to resist or delay performing compulsions?',
-    options: [
-      { value: 0, label: 'Always Resist', desc: 'Effort is always made to resist' },
-      { value: 1, label: 'Much Resistance', desc: 'Tries to resist most of the time' },
-      { value: 2, label: 'Some Resistance', desc: 'Makes some effort to resist' },
-      { value: 3, label: 'Yields to All', desc: 'Yields without attempt to control' },
-      { value: 4, label: 'Completely Yields', desc: 'Completely yields to all compulsions' }
-    ]
-  },
-  {
-    id: 10,
-    category: 'Compulsions',
-    title: 'Control over Compulsive Behaviors',
-    description: 'How strong is the drive to perform compulsive behaviors?',
-    options: [
-      { value: 0, label: 'Complete Control', desc: 'Full control over behavior' },
-      { value: 1, label: 'Much Control', desc: 'Can delay behavior with effort' },
-      { value: 2, label: 'Moderate Control', desc: 'Can delay only with great difficulty' },
-      { value: 3, label: 'Little Control', desc: 'Rarely able to delay behavior' },
-      { value: 4, label: 'No Control', desc: 'Involuntary drive to perform' }
-    ]
-  }
-];
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-export default function YbocsCalculator() {
-  const [answers, setAnswers] = useState(
-    QUESTIONS.reduce((acc, q) => ({ ...acc, [q.id]: 0 }), {})
-  );
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Nunito Sans', sans-serif;
+      line-height: 1.5;
+      padding: 1rem;
+      min-height: 100vh;
+    }
 
-  const handleSelect = (id, value) => {
-    setAnswers(prev => ({ ...prev, [id]: value }));
-  };
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
 
-  const resetCalculator = () => {
-    setAnswers(QUESTIONS.reduce((acc, q) => ({ ...acc, [q.id]: 0 }), {}));
-  };
+    /* SAC Topbar */
+    .sac-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--stone);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
 
-  const obsessionScore = QUESTIONS.filter(q => q.category === 'Obsessions')
-    .reduce((sum, q) => sum + (answers[q.id] || 0), 0);
+    .sac-topbar a {
+      font-family: 'Libre Baskerville', serif;
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: var(--forest);
+      text-decoration: none;
+      letter-spacing: 0.025em;
+    }
 
-  const compulsionScore = QUESTIONS.filter(q => q.category === 'Compulsions')
-    .reduce((sum, q) => sum + (answers[q.id] || 0), 0);
+    .sac-topbar a:hover {
+      opacity: 0.8;
+    }
 
-  const totalScore = obsessionScore + compulsionScore;
+    .sac-topbar span {
+      font-size: 0.75rem;
+      color: var(--grey);
+    }
 
-  const getSeverity = (score) => {
-    if (score <= 7) return { label: 'Subclinical / Low Range', color: '#45735d' }; // Forest Green
-    if (score <= 15) return { label: 'Mild Range', color: '#ba945e' }; // Warm Gold
-    if (score <= 23) return { label: 'Moderate Range', color: '#b68d76' }; // Terracotta
-    if (score <= 31) return { label: 'Severe Range', color: '#8c5946' }; // Deep Terracotta
-    return { label: 'Extreme Range', color: '#35361c' }; // Dark Forest
-  };
+    /* Header Panel */
+    .header-panel {
+      background-color: var(--accent-bg);
+      border: 1px solid var(--stone);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
 
-  const severity = getSeverity(totalScore);
+    @media (min-width: 768px) {
+      .header-panel {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
 
-  return (
-    <div 
-      className="min-h-screen text-[#222a26] p-4 md:p-8"
-      style={{ 
-        backgroundColor: '#faf8f5', 
-        fontFamily: "'Nunito Sans', sans-serif" 
-      }}
-    >
-      {/* Google Fonts Preload */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Nunito+Sans:wght@400;600;700;800&display=display');
-        .font-serif-sac { font-family: 'Libre Baskerville', serif; }
-      `}</style>
+    .header-title {
+      font-family: 'Libre Baskerville', serif;
+      color: var(--forest);
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
 
-      {/* Second Arrow Counseling Topbar Link */}
-      <div className="max-w-[1100px] mx-auto mb-4 flex items-center justify-between border-b pb-2" style={{ borderColor: '#bdb7a2' }}>
-        <a 
-          href="https://www.secondarrow.net" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="font-serif-sac text-sm font-bold tracking-wide transition-opacity hover:opacity-80"
-          style={{ color: '#35361c' }}
-        >
-          Second Arrow Counseling
-        </a>
-        <span className="text-xs" style={{ color: '#6d7873' }}>Clinical Tools Suite</span>
+    .header-desc {
+      font-size: 0.875rem;
+      color: var(--grey);
+      margin-top: 0.25rem;
+      max-width: 42rem;
+    }
+
+    .reset-btn {
+      background-color: var(--bg);
+      color: var(--forest);
+      border: 1px solid var(--stone);
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s ease;
+      align-self: flex-start;
+    }
+
+    .reset-btn:hover {
+      background-color: var(--accent-bg);
+      border-color: var(--forest);
+    }
+
+    /* Sticky Score Summary Bar */
+    .summary-card {
+      position: sticky;
+      top: 1rem;
+      z-index: 100;
+      background-color: var(--forest);
+      color: var(--bg);
+      border-radius: 1rem;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .summary-card {
+        grid-template-columns: repeat(4, 1fr);
+        align-items: center;
+      }
+    }
+
+    .stat-label {
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      opacity: 0.8;
+      display: block;
+    }
+
+    .stat-val-main {
+      font-size: 1.875rem;
+      font-weight: 800;
+    }
+
+    .stat-val-main span {
+      font-size: 1rem;
+      font-weight: 400;
+      opacity: 0.6;
+    }
+
+    .stat-val-obs {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--terra);
+    }
+
+    .stat-val-comp {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .severity-badge {
+      display: inline-block;
+      margin-top: 0.25rem;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: 9999px;
+      color: #faf8f5;
+    }
+
+    /* Questions & Cards */
+    .questions-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .card {
+      background-color: #ffffff;
+      border: 1px solid var(--stone);
+      border-radius: 1rem;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .category-badge {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.25rem;
+    }
+
+    .badge-obs {
+      background-color: var(--accent-bg);
+      color: var(--terra);
+      border: 1px solid var(--terra);
+    }
+
+    .badge-comp {
+      background-color: var(--bg);
+      color: var(--gold);
+      border: 1px solid var(--gold);
+    }
+
+    .card-title {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--forest);
+    }
+
+    .card-desc {
+      font-size: 0.75rem;
+      color: var(--grey);
+      margin-bottom: 1rem;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 0.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .options-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
+    .option-btn {
+      background-color: var(--bg);
+      border: 1px solid var(--stone);
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.15s ease-in-out;
+    }
+
+    .option-btn:hover {
+      border-color: var(--grey);
+      background-color: var(--accent-bg);
+    }
+
+    .option-btn.selected-obs {
+      background-color: var(--accent-bg);
+      border-color: var(--terra);
+      box-shadow: 0 0 0 1px var(--terra);
+    }
+
+    .option-btn.selected-comp {
+      background-color: var(--accent-bg);
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px var(--gold);
+    }
+
+    .opt-header {
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: var(--forest);
+      margin-bottom: 0.25rem;
+    }
+
+    .opt-desc {
+      font-size: 0.6875rem;
+      color: var(--grey);
+      line-height: 1.25;
+    }
+
+    /* Disclaimer Box */
+    .disclaimer-box {
+      margin-top: 2.5rem;
+      background-color: var(--accent-bg);
+      border: 1px solid var(--stone);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      font-size: 0.75rem;
+      color: var(--grey);
+      display: flex;
+      gap: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .disclaimer-box strong {
+      color: var(--forest);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Second Arrow Counseling Topbar Link -->
+    <div class="sac-topbar">
+      <a href="https://www.secondarrow.net" target="_blank" rel="noopener noreferrer">Second Arrow Counseling</a>
+      <span>Clinical Tools Suite</span>
+    </div>
+
+    <!-- Header Panel -->
+    <div class="header-panel">
+      <div>
+        <h1 class="header-title">Yale-Brown Obsessive Compulsive Scale (Y-BOCS)</h1>
+        <p class="header-desc">
+          A 10-item assessment measuring the presence, duration, and energetic impact of intrusive thoughts and compulsive behaviors over the past 7 days.
+        </p>
       </div>
+      <button class="reset-btn" onclick="resetForm()">
+        &#8634; Reset Form
+      </button>
+    </div>
 
-      <div className="max-w-[1100px] mx-auto">
-        {/* Header Panel */}
-        <div 
-          className="p-6 md:p-8 rounded-2xl mb-6 shadow-sm border flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
-          style={{ backgroundColor: '#F5F3EF', borderColor: '#bdb7a2' }}
-        >
-          <div>
-            <h1 className="font-serif-sac text-2xl md:text-3xl font-bold" style={{ color: '#35361c' }}>
-              Yale-Brown Obsessive Compulsive Scale (Y-BOCS)
-            </h1>
-            <p className="text-sm mt-2 max-w-2xl leading-relaxed" style={{ color: '#6d7873' }}>
-              A 10-item assessment measuring the presence, duration, and energetic impact of intrusive thoughts and compulsive behaviors over the past 7 days.
-            </p>
-          </div>
-          <button
-            onClick={resetCalculator}
-            className="flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all border"
-            style={{ 
-              backgroundColor: '#faf8f5', 
-              color: '#35361c', 
-              borderColor: '#bdb7a2' 
-            }}
-          >
-            <RotateCcw className="w-3.5 h-3.5" /> Reset Form
-          </button>
-        </div>
-
-        {/* Dynamic Summary Card (Sticky) */}
-        <div 
-          className="sticky top-4 z-10 p-6 rounded-2xl shadow-md mb-8 border"
-          style={{ backgroundColor: '#35361c', borderColor: '#35361c', color: '#faf8f5' }}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
-            <div>
-              <span className="text-xs uppercase tracking-wider font-semibold opacity-80">Total Severity Score</span>
-              <div className="text-3xl font-extrabold mt-1">
-                {totalScore} <span className="text-base font-normal opacity-60">/ 40</span>
-              </div>
-            </div>
-            <div>
-              <span className="text-xs uppercase tracking-wider font-semibold opacity-80">Obsessions Subscore</span>
-              <div className="text-2xl font-bold mt-1" style={{ color: '#b68d76' }}>
-                {obsessionScore} <span className="text-sm font-normal text-white opacity-60">/ 20</span>
-              </div>
-            </div>
-            <div>
-              <span className="text-xs uppercase tracking-wider font-semibold opacity-80">Compulsions Subscore</span>
-              <div className="text-2xl font-bold mt-1" style={{ color: '#ba945e' }}>
-                {compulsionScore} <span className="text-sm font-normal text-white opacity-60">/ 20</span>
-              </div>
-            </div>
-            <div className="md:border-l md:border-[#6d7873] md:pl-6">
-              <span className="text-xs uppercase tracking-wider font-semibold opacity-80">Clinical Impact</span>
-              <div 
-                className="mt-2 inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full"
-                style={{ backgroundColor: severity.color, color: '#faf8f5' }}
-              >
-                {severity.label}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Questions Grid */}
-        <div className="space-y-6">
-          {QUESTIONS.map((q) => (
-            <div 
-              key={q.id} 
-              className="p-6 rounded-2xl shadow-sm border transition-shadow"
-              style={{ backgroundColor: '#ffffff', borderColor: '#bdb7a2' }}
-            >
-              <div className="flex items-center justify-between mb-2">
-                <span 
-                  className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded"
-                  style={{ 
-                    backgroundColor: q.category === 'Obsessions' ? '#F5F3EF' : '#faf8f5', 
-                    color: q.category === 'Obsessions' ? '#b68d76' : '#ba945e',
-                    border: `1px solid ${q.category === 'Obsessions' ? '#b68d76' : '#ba945e'}`
-                  }}
-                >
-                  Item {q.id}: {q.category}
-                </span>
-                <span className="text-xs font-semibold" style={{ color: '#6d7873' }}>
-                  Score: {answers[q.id]}
-                </span>
-              </div>
-
-              <h2 className="font-serif-sac text-lg font-bold mt-1" style={{ color: '#35361c' }}>
-                {q.title}
-              </h2>
-              <p className="text-xs mb-4" style={{ color: '#6d7873' }}>
-                {q.description}
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-5 gap-2.5">
-                {q.options.map((opt) => {
-                  const isSelected = answers[q.id] === opt.value;
-                  const primaryColor = q.category === 'Obsessions' ? '#b68d76' : '#ba945e';
-                  return (
-                    <button
-                      key={opt.value}
-                      onClick={() => handleSelect(q.id, opt.value)}
-                      className="p-3 text-left rounded-xl border transition-all text-xs flex flex-col justify-between"
-                      style={{
-                        backgroundColor: isSelected ? '#F5F3EF' : '#faf8f5',
-                        borderColor: isSelected ? primaryColor : '#bdb7a2',
-                        boxShadow: isSelected ? `0 0 0 1px ${primaryColor}` : 'none'
-                      }}
-                    >
-                      <div className="flex items-center justify-between w-full mb-1">
-                        <span className="font-bold" style={{ color: isSelected ? '#35361c' : '#6d7873' }}>
-                          {opt.value} - {opt.label}
-                        </span>
-                        {isSelected && <CheckCircle2 className="w-3.5 h-3.5 shrink-0" style={{ color: primaryColor }} />}
-                      </div>
-                      <span className="text-[11px] leading-snug" style={{ color: '#6d7873' }}>
-                        {opt.desc}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Standard Disclaimer */}
-        <div 
-          className="mt-10 p-5 rounded-2xl border text-xs flex items-start gap-3.5 leading-relaxed"
-          style={{ backgroundColor: '#F5F3EF', borderColor: '#bdb7a2', color: '#6d7873' }}
-        >
-          <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#b68d76' }} />
-          <div>
-            <strong style={{ color: '#35361c' }}>Disclaimer:</strong> This tool is intended for psychoeducational purposes only[cite: 1]. It does not constitute medical advice, diagnosis, or treatment[cite: 1]. The information presented is a simplified representation of complex neurobiological processes and should not replace consultation with a licensed healthcare or mental health professional[cite: 1].
-          </div>
+    <!-- Sticky Score Summary Bar -->
+    <div class="summary-card">
+      <div>
+        <span class="stat-label">Total Severity Score</span>
+        <div class="stat-val-main" id="total-score">0 <span>/ 40</span></div>
+      </div>
+      <div>
+        <span class="stat-label">Obsessions Subscore</span>
+        <div class="stat-val-obs" id="obs-score">0 <span style="font-size: 0.875rem; font-weight: normal; color: #ffffff; opacity: 0.6;">/ 20</span></div>
+      </div>
+      <div>
+        <span class="stat-label">Compulsions Subscore</span>
+        <div class="stat-val-comp" id="comp-score">0 <span style="font-size: 0.875rem; font-weight: normal; color: #ffffff; opacity: 0.6;">/ 20</span></div>
+      </div>
+      <div style="border-left: 1px solid var(--grey); padding-left: 1rem;">
+        <span class="stat-label">Clinical Impact</span>
+        <div id="severity-badge" class="severity-badge" style="background-color: var(--green);">
+          Subclinical / Low Range
         </div>
       </div>
     </div>
-  );
-}
+
+    <!-- Questions Wrapper -->
+    <div class="questions-wrapper" id="questions-container">
+      <!-- Items dynamically rendered by JavaScript -->
+    </div>
+
+    <!-- Standard Disclaimer -->
+    <div class="disclaimer-box">
+      <div style="font-size: 1rem; color: var(--terra); font-weight: bold;">&#9888;</div>
+      <div>
+        <strong>Disclaimer:</strong> This tool is intended for psychoeducational purposes only[cite: 1]. It does not constitute medical advice, diagnosis, or treatment[cite: 1]. The information presented is a simplified representation of complex neurobiological processes and should not replace consultation with a licensed healthcare or mental health professional[cite: 1].
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const QUESTIONS = [
+      {
+        id: 1,
+        category: 'Obsessions',
+        title: 'Time Occupied by Obsessive Thoughts',
+        description: 'How much time is occupied by intrusive or obsessive thoughts?',
+        options: [
+          { value: 0, label: 'None', desc: '0 hrs/day' },
+          { value: 1, label: 'Mild', desc: 'Less than 1 hr/day' },
+          { value: 2, label: 'Moderate', desc: '1 to 3 hrs/day' },
+          { value: 3, label: 'Severe', desc: '3 to 8 hrs/day' },
+          { value: 4, label: 'Extreme', desc: 'Greater than 8 hrs/day' }
+        ]
+      },
+      {
+        id: 2,
+        category: 'Obsessions',
+        title: 'Interference due to Obsessive Thoughts',
+        description: 'How much do your obsessive thoughts interfere with daily life and functioning?',
+        options: [
+          { value: 0, label: 'None', desc: 'No interference' },
+          { value: 1, label: 'Mild', desc: 'Slight interference, manageable' },
+          { value: 2, label: 'Moderate', desc: 'Definite interference with getting things done' },
+          { value: 3, label: 'Severe', desc: 'Substantial impairment' },
+          { value: 4, label: 'Extreme', desc: 'Incapacitating' }
+        ]
+      },
+      {
+        id: 3,
+        category: 'Obsessions',
+        title: 'Distress Associated with Obsessive Thoughts',
+        description: 'How much distress or inner tension do your obsessive thoughts cause?',
+        options: [
+          { value: 0, label: 'None', desc: 'No distress' },
+          { value: 1, label: 'Mild', desc: 'Infrequent, not troubling' },
+          { value: 2, label: 'Moderate', desc: 'Frequent, disturbing, but manageable' },
+          { value: 3, label: 'Severe', desc: 'Very disturbing, frequent' },
+          { value: 4, label: 'Extreme', desc: 'Near constant, disabling distress' }
+        ]
+      },
+      {
+        id: 4,
+        category: 'Obsessions',
+        title: 'Resistance against Obsessions',
+        description: 'How much effort do you make to redirect or resist obsessive thoughts?',
+        options: [
+          { value: 0, label: 'Always Resist', desc: 'Effort is always made to redirect' },
+          { value: 1, label: 'Much Resistance', desc: 'Tries to redirect most of the time' },
+          { value: 2, label: 'Some Resistance', desc: 'Makes some effort to redirect' },
+          { value: 3, label: 'Yields to All', desc: 'Yields without attempt to control' },
+          { value: 4, label: 'Completely Yields', desc: 'Completely yields to all thoughts' }
+        ]
+      },
+      {
+        id: 5,
+        category: 'Obsessions',
+        title: 'Control over Obsessive Thoughts',
+        description: 'How much control do you have over redirecting your obsessive thoughts?',
+        options: [
+          { value: 0, label: 'Complete Control', desc: 'Can dismiss thoughts easily' },
+          { value: 1, label: 'Much Control', desc: 'Can divert attention with effort' },
+          { value: 2, label: 'Moderate Control', desc: 'Can divert attention with difficulty' },
+          { value: 3, label: 'Little Control', desc: 'Rarely successful in diverting' },
+          { value: 4, label: 'No Control', desc: 'Involuntary, unable to divert' }
+        ]
+      },
+      {
+        id: 6,
+        category: 'Compulsions',
+        title: 'Time Spent Performing Compulsive Behaviors',
+        description: 'How much time do you spend performing compulsive behaviors or rituals?',
+        options: [
+          { value: 0, label: 'None', desc: '0 hrs/day' },
+          { value: 1, label: 'Mild', desc: 'Less than 1 hr/day' },
+          { value: 2, label: 'Moderate', desc: '1 to 3 hrs/day' },
+          { value: 3, label: 'Severe', desc: '3 to 8 hrs/day' },
+          { value: 4, label: 'Extreme', desc: 'Greater than 8 hrs/day' }
+        ]
+      },
+      {
+        id: 7,
+        category: 'Compulsions',
+        title: 'Interference due to Compulsive Behaviors',
+        description: 'How much do compulsive behaviors interfere with daily activities?',
+        options: [
+          { value: 0, label: 'None', desc: 'No interference' },
+          { value: 1, label: 'Mild', desc: 'Slight interference, manageable' },
+          { value: 2, label: 'Moderate', desc: 'Definite interference with performance' },
+          { value: 3, label: 'Severe', desc: 'Substantial impairment' },
+          { value: 4, label: 'Extreme', desc: 'Incapacitating' }
+        ]
+      },
+      {
+        id: 8,
+        category: 'Compulsions',
+        title: 'Distress if Compulsions Prevented',
+        description: 'How anxious or distressed would you feel if prevented from performing compulsions?',
+        options: [
+          { value: 0, label: 'None', desc: 'No anxiety' },
+          { value: 1, label: 'Mild', desc: 'Slight anxiety, easily managed' },
+          { value: 2, label: 'Moderate', desc: 'Moderate, manageable anxiety' },
+          { value: 3, label: 'Severe', desc: 'Prominent and disturbing anxiety' },
+          { value: 4, label: 'Extreme', desc: 'Disabling anxiety' }
+        ]
+      },
+      {
+        id: 9,
+        category: 'Compulsions',
+        title: 'Resistance against Compulsions',
+        description: 'How much effort do you make to resist or delay performing compulsions?',
+        options: [
+          { value: 0, label: 'Always Resist', desc: 'Effort is always made to resist' },
+          { value: 1, label: 'Much Resistance', desc: 'Tries to resist most of the time' },
+          { value: 2, label: 'Some Resistance', desc: 'Makes some effort to resist' },
+          { value: 3, label: 'Yields to All', desc: 'Yields without attempt to control' },
+          { value: 4, label: 'Completely Yields', desc: 'Completely yields to all compulsions' }
+        ]
+      },
+      {
+        id: 10,
+        category: 'Compulsions',
+        title: 'Control over Compulsive Behaviors',
+        description: 'How strong is the drive to perform compulsive behaviors?',
+        options: [
+          { value: 0, label: 'Complete Control', desc: 'Full control over behavior' },
+          { value: 1, label: 'Much Control', desc: 'Can delay behavior with effort' },
+          { value: 2, label: 'Moderate Control', desc: 'Can delay only with great difficulty' },
+          { value: 3, label: 'Little Control', desc: 'Rarely able to delay behavior' },
+          { value: 4, label: 'No Control', desc: 'Involuntary drive to perform' }
+        ]
+      }
+    ];
+
+    let state = QUESTIONS.reduce((acc, q) => ({ ...acc, [q.id]: 0 }), {});
+
+    function renderQuestions() {
+      const container = document.getElementById('questions-container');
+      container.innerHTML = '';
+
+      QUESTIONS.forEach(q => {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const isObs = q.category === 'Obsessions';
+        const badgeClass = isObs ? 'badge-obs' : 'badge-comp';
+
+        let optionsHTML = '';
+        q.options.forEach(opt => {
+          const isSelected = state[q.id] === opt.value;
+          let selectedClass = '';
+          if (isSelected) {
+            selectedClass = isObs ? 'selected-obs' : 'selected-comp';
+          }
+
+          optionsHTML += `
+            <button class="option-btn ${selectedClass}" onclick="selectOption(${q.id}, ${opt.value})">
+              <div class="opt-header">${opt.value} - ${opt.label}</div>
+              <div class="opt-desc">${opt.desc}</div>
+            </button>
+          `;
+        });
+
+        card.innerHTML = `
+          <div class="card-top">
+            <span class="category-badge ${badgeClass}">Item ${q.id}: ${q.category}</span>
+            <span style="font-size: 0.75rem; color: var(--grey); font-weight: 600;">Score: ${state[q.id]}</span>
+          </div>
+          <h2 class="card-title">${q.title}</h2>
+          <p class="card-desc">${q.description}</p>
+          <div class="options-grid">${optionsHTML}</div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function selectOption(id, value) {
+      state[id] = value;
+      updateScores();
+      renderQuestions();
+    }
+
+    function updateScores() {
+      const obsScore = QUESTIONS.filter(q => q.category === 'Obsessions')
+        .reduce((sum, q) => sum + state[q.id], 0);
+
+      const compScore = QUESTIONS.filter(q => q.category === 'Compulsions')
+        .reduce((sum, q) => sum + state[q.id], 0);
+
+      const totalScore = obsScore + compScore;
+
+      document.getElementById('obs-score').innerHTML = `${obsScore} <span style="font-size: 0.875rem; font-weight: normal; color: #ffffff; opacity: 0.6;">/ 20</span>`;
+      document.getElementById('comp-score').innerHTML = `${compScore} <span style="font-size: 0.875rem; font-weight: normal; color: #ffffff; opacity: 0.6;">/ 20</span>`;
+      document.getElementById('total-score').innerHTML = `${totalScore} <span>/ 40</span>`;
+
+      const badge = document.getElementById('severity-badge');
+      if (totalScore <= 7) {
+        badge.innerText = 'Subclinical / Low Range';
+        badge.style.backgroundColor = 'var(--green)';
+      } else if (totalScore <= 15) {
+        badge.innerText = 'Mild Range';
+        badge.style.backgroundColor = 'var(--gold)';
+      } else if (totalScore <= 23) {
+        badge.innerText = 'Moderate Range';
+        badge.style.backgroundColor = 'var(--terra)';
+      } else if (totalScore <= 31) {
+        badge.innerText = 'Severe Range';
+        badge.style.backgroundColor = '#8c5946';
+      } else {
+        badge.innerText = 'Extreme Range';
+        badge.style.backgroundColor = 'var(--forest)';
+      }
+    }
+
+    function resetForm() {
+      state = QUESTIONS.reduce((acc, q) => ({ ...acc, [q.id]: 0 }), {});
+      updateScores();
+      renderQuestions();
+    }
+
+    // Initial load
+    renderQuestions();
+  </script>
+</body>
+</html>
