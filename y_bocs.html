@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title">Y-BOCS Assessment Tool | Second Arrow Counseling</title>
+  <title>Yale-Brown Obsessive-Compulsive Scale (Y-BOCS)</title>
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,16 +13,15 @@
   <style>
     /* Second Arrow Counseling Design System */
     :root {
-      --green:     #45735d;  /* Forest Green / NT */
-      --gold:      #ba945e;  /* Warm Gold / Autism */
-      --terra:     #b68d76;  /* Terracotta / ADHD */
-      --forest:    #35361c;  /* Dark Forest / AuDHD */
+      --green:     #45735d;  /* Forest Green */
+      --gold:      #ba945e;  /* Warm Gold */
+      --terra:     #b68d76;  /* Terracotta */
+      --forest:    #35361c;  /* Dark Forest */
       --text:      #222a26;  /* Primary Text */
-      --grey:      #6d7873;  /* Warm Grey / Body Labels */
+      --grey:      #6d7873;  /* Warm Grey */
       --bg:        #faf8f5;  /* Page Background */
       --accent-bg: #F5F3EF;  /* Panel Background */
       --stone:     #bdb7a2;  /* Borders & Dividers */
-      --cool-grey: #a6aea6;
     }
 
     * {
@@ -52,7 +51,7 @@
       align-items: center;
       border-bottom: 1px solid var(--stone);
       padding-bottom: 0.5rem;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
 
     .sac-topbar a {
@@ -61,11 +60,6 @@
       font-size: 0.875rem;
       color: var(--forest);
       text-decoration: none;
-      letter-spacing: 0.025em;
-    }
-
-    .sac-topbar a:hover {
-      opacity: 0.8;
     }
 
     .sac-topbar span {
@@ -80,54 +74,68 @@
       border-radius: 1rem;
       padding: 1.5rem;
       margin-bottom: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
     }
 
-    @media (min-width: 768px) {
-      .header-panel {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
+    /* Compact Main Header */
+    .main-title {
+      font-family: 'Libre Baskerville', serif;
+      color: var(--forest);
+      font-size: 1.15rem; /* Reduced size for headers */
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .patient-info-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--stone);
+    }
+
+    @media (min-width: 640px) {
+      .patient-info-grid {
+        grid-template-columns: 2fr 1fr 1fr;
       }
     }
 
-    .header-title {
-      font-family: 'Libre Baskerville', serif;
-      color: var(--forest);
-      font-size: 1.5rem;
-      font-weight: 700;
+    .info-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
     }
 
-    .header-desc {
-      font-size: 0.875rem;
-      color: var(--grey);
-      margin-top: 0.25rem;
-      max-width: 42rem;
-    }
-
-    .reset-btn {
-      background-color: var(--bg);
-      color: var(--forest);
-      border: 1px solid var(--stone);
-      border-radius: 0.5rem;
-      padding: 0.5rem 1rem;
-      font-size: 0.75rem;
+    .info-group label {
+      font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.375rem;
-      transition: all 0.2s ease;
-      align-self: flex-start;
+      color: var(--grey);
     }
 
-    .reset-btn:hover {
-      background-color: var(--accent-bg);
-      border-color: var(--forest);
+    .info-group input {
+      padding: 0.5rem;
+      border: 1px solid var(--stone);
+      border-radius: 0.5rem;
+      background-color: #ffffff;
+      font-family: inherit;
+      font-size: 0.875rem;
+    }
+
+    /* Definition Box */
+    .definition-box {
+      background-color: #ffffff;
+      border: 1px solid var(--stone);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: var(--grey);
+    }
+
+    .definition-box strong {
+      color: var(--forest);
     }
 
     /* Sticky Score Summary Bar */
@@ -138,7 +146,7 @@
       background-color: var(--forest);
       color: var(--bg);
       border-radius: 1rem;
-      padding: 1.25rem 1.5rem;
+      padding: 1rem 1.5rem;
       margin-bottom: 2rem;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
       display: grid;
@@ -154,7 +162,7 @@
     }
 
     .stat-label {
-      font-size: 0.6875rem;
+      font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       font-weight: 600;
@@ -163,24 +171,24 @@
     }
 
     .stat-val-main {
-      font-size: 1.875rem;
+      font-size: 1.75rem;
       font-weight: 800;
     }
 
     .stat-val-main span {
-      font-size: 1rem;
+      font-size: 0.9rem;
       font-weight: 400;
       opacity: 0.6;
     }
 
     .stat-val-obs {
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: var(--terra);
     }
 
     .stat-val-comp {
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: var(--gold);
     }
@@ -188,8 +196,8 @@
     .severity-badge {
       display: inline-block;
       margin-top: 0.25rem;
-      padding: 0.25rem 0.75rem;
-      font-size: 0.75rem;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -197,118 +205,133 @@
       color: #faf8f5;
     }
 
-    /* Questions & Cards */
-    .questions-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .card {
-      background-color: #ffffff;
-      border: 1px solid var(--stone);
-      border-radius: 1rem;
-      padding: 1.25rem 1.5rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
-    }
-
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.5rem;
-    }
-
-    .category-badge {
-      font-size: 0.6875rem;
+    /* Compact Category Section Header */
+    .category-header {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.85rem; /* Small Compact Header */
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      padding: 0.2rem 0.5rem;
-      border-radius: 0.25rem;
-    }
-
-    .badge-obs {
-      background-color: var(--accent-bg);
-      color: var(--terra);
-      border: 1px solid var(--terra);
-    }
-
-    .badge-comp {
-      background-color: var(--bg);
-      color: var(--gold);
-      border: 1px solid var(--gold);
-    }
-
-    .card-title {
-      font-family: 'Libre Baskerville', serif;
-      font-size: 1.125rem;
-      font-weight: 700;
       color: var(--forest);
+      background-color: var(--accent-bg);
+      border: 1px solid var(--stone);
+      padding: 0.4rem 0.75rem;
+      border-radius: 0.5rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
     }
 
-    .card-desc {
-      font-size: 0.75rem;
-      color: var(--grey);
+    /* Symptom Checklist Table */
+    .checklist-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #ffffff;
+      border: 1px solid var(--stone);
+      border-radius: 0.75rem;
+      overflow: hidden;
       margin-bottom: 1rem;
     }
 
-    .options-grid {
-      display: grid;
-      grid-template-columns: repeat(1, 1fr);
+    .checklist-table th {
+      background-color: var(--accent-bg);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--grey);
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--stone);
+    }
+
+    .checklist-table td {
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid var(--stone);
+      font-size: 0.8rem;
+    }
+
+    .checklist-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .check-col {
+      text-align: center;
+      width: 50px;
+    }
+
+    .examples-text {
+      color: var(--grey);
+      font-size: 0.75rem;
+    }
+
+    /* Larger Question Styling for Part 2 */
+    .part2-question-card {
+      background-color: #ffffff;
+      border: 1px solid var(--stone);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    /* Prominent & Larger Questions */
+    .q-title {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.35rem; /* Larger Prominent Question Text */
+      font-weight: 700;
+      color: var(--forest);
+      margin-bottom: 0.35rem;
+      line-height: 1.3;
+    }
+
+    .q-prompt {
+      font-size: 1rem; /* Larger Prompt Text */
+      color: var(--text);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
       gap: 0.5rem;
     }
 
-    @media (min-width: 640px) {
-      .options-grid {
-        grid-template-columns: repeat(5, 1fr);
-      }
-    }
-
-    .option-btn {
+    .option-item {
       background-color: var(--bg);
       border: 1px solid var(--stone);
       border-radius: 0.75rem;
-      padding: 0.75rem;
-      text-align: left;
+      padding: 0.85rem 1rem;
       cursor: pointer;
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.75rem;
       transition: all 0.15s ease-in-out;
     }
 
-    .option-btn:hover {
-      border-color: var(--grey);
+    .option-item:hover {
       background-color: var(--accent-bg);
+      border-color: var(--grey);
     }
 
-    .option-btn.selected-obs {
+    .option-item.selected {
       background-color: var(--accent-bg);
       border-color: var(--terra);
       box-shadow: 0 0 0 1px var(--terra);
     }
 
-    .option-btn.selected-comp {
-      background-color: var(--accent-bg);
-      border-color: var(--gold);
-      box-shadow: 0 0 0 1px var(--gold);
+    .option-item input[type="radio"] {
+      margin-top: 0.2rem;
+      accent-color: var(--terra);
     }
 
-    .opt-header {
-      font-weight: 700;
-      font-size: 0.75rem;
-      color: var(--forest);
-      margin-bottom: 0.25rem;
+    .option-text {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.35;
     }
 
-    .opt-desc {
-      font-size: 0.6875rem;
-      color: var(--grey);
-      line-height: 1.25;
-    }
-
-    /* Disclaimer Box */
+    /* Standard Disclaimer */
     .disclaimer-box {
       margin-top: 2.5rem;
       background-color: var(--accent-bg);
@@ -330,284 +353,471 @@
 <body>
 
   <div class="container">
-    <!-- Second Arrow Counseling Topbar Link -->
+    <!-- Topbar -->
     <div class="sac-topbar">
       <a href="https://www.secondarrow.net" target="_blank" rel="noopener noreferrer">Second Arrow Counseling</a>
-      <span>Clinical Tools Suite</span>
+      <span>Yale-Brown Obsessive-Compulsive Scale (Y-BOCS) Replica</span>
     </div>
 
-    <!-- Header Panel -->
+    <!-- Header Panel with Patient Info -->
     <div class="header-panel">
-      <div>
-        <h1 class="header-title">Yale-Brown Obsessive Compulsive Scale (Y-BOCS)</h1>
-        <p class="header-desc">
-          A 10-item assessment measuring the presence, duration, and energetic impact of intrusive thoughts and compulsive behaviors over the past 7 days.
-        </p>
+      <h1 class="main-title">1. Patient Information & Instructions</h1>
+      
+      <div class="patient-info-grid">
+        <div class="info-group">
+          <label for="patient-name">Patient Name (First, MI, Last)</label>
+          <input type="text" id="patient-name" placeholder="Enter full name">
+        </div>
+        <div class="info-group">
+          <label for="dob">Date of Birth</label>
+          <input type="date" id="dob">
+        </div>
+        <div class="info-group">
+          <label for="today-date">Today's Date</label>
+          <input type="date" id="today-date">
+        </div>
       </div>
-      <button class="reset-btn" onclick="resetForm()">
-        &#8634; Reset Form
-      </button>
+
+      <div class="definition-box">
+        <p><strong>OBSESSIONS</strong> are unwelcomed and distressing ideas, thoughts, or impulses that repeatedly enter your mind[cite: 2]. They may seem to occur against your will[cite: 2]. Examples include recurrent impulses to do harm or severe fear of contamination[cite: 2].</p>
+        <p style="margin-top: 0.5rem;"><strong>COMPULSIONS</strong> are behaviors or acts that you feel driven to perform although you may recognize them as senseless or excessive[cite: 2]. Examples include checking door locks repeatedly, handwashing, or mental rituals like silent repeating phrases[cite: 2].</p>
+      </div>
     </div>
 
-    <!-- Sticky Score Summary Bar -->
+    <!-- Sticky Live Score Summary -->
     <div class="summary-card">
       <div>
-        <span class="stat-label">Total Severity Score</span>
+        <span class="stat-label">Total Score (Items 1-10)</span>
         <div class="stat-val-main" id="total-score">0 <span>/ 40</span></div>
       </div>
       <div>
-        <span class="stat-label">Obsessions Subscore</span>
-        <div class="stat-val-obs" id="obs-score">0 <span style="font-size: 0.875rem; font-weight: normal; color: #ffffff; opacity: 0.6;">/ 20</span></div>
+        <span class="stat-label">Obsessions Subtotal</span>
+        <div class="stat-val-obs" id="obs-score">0 <span style="font-size: 0.8rem; font-weight: normal; color: #ffffff; opacity: 0.6;">/ 20</span></div>
       </div>
       <div>
-        <span class="stat-label">Compulsions Subscore</span>
-        <div class="stat-val-comp" id="comp-score">0 <span style="font-size: 0.875rem; font-weight: normal; color: #ffffff; opacity: 0.6;">/ 20</span></div>
+        <span class="stat-label">Compulsions Subtotal</span>
+        <div class="stat-val-comp" id="comp-score">0 <span style="font-size: 0.8rem; font-weight: normal; color: #ffffff; opacity: 0.6;">/ 20</span></div>
       </div>
       <div style="border-left: 1px solid var(--grey); padding-left: 1rem;">
-        <span class="stat-label">Clinical Impact</span>
+        <span class="stat-label">Severity Range</span>
         <div id="severity-badge" class="severity-badge" style="background-color: var(--green);">
-          Subclinical / Low Range
+          Subclinical (0-7)
         </div>
       </div>
     </div>
 
-    <!-- Questions Wrapper -->
-    <div class="questions-wrapper" id="questions-container">
-      <!-- Items dynamically rendered by JavaScript -->
+    <!-- PART 1: SYMPTOM CHECKLIST -->
+    <div style="margin-bottom: 2rem;">
+      <div class="category-header" style="font-size: 0.95rem; background-color: var(--forest); color: #faf8f5;">
+        Part 1: Y-BOCS Symptom Checklist (Goodman, Rasmussen, et al.)
+      </div>
+      <p style="font-size: 0.8rem; color: var(--grey); margin-bottom: 1rem;">
+        Check "Past" and/or "Current" for each obsession and compulsion you have experienced[cite: 2].
+      </p>
+
+      <div id="checklist-container">
+        <!-- Checklist Categories Rendered by JS -->
+      </div>
     </div>
 
-    <!-- Standard Disclaimer -->
+    <!-- PART 2: SEVERITY ASSESSMENT -->
+    <div>
+      <div class="category-header" style="font-size: 0.95rem; background-color: var(--forest); color: #faf8f5; margin-bottom: 1.5rem;">
+        Part 2: Severity Assessment (Questions 1-11)
+      </div>
+
+      <div id="part2-container">
+        <!-- Questions 1 to 11 Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Disclaimer -->
     <div class="disclaimer-box">
       <div style="font-size: 1rem; color: var(--terra); font-weight: bold;">&#9888;</div>
       <div>
-        <strong>Disclaimer:</strong> This tool is intended for psychoeducational purposes only[cite: 1]. It does not constitute medical advice, diagnosis, or treatment[cite: 1]. The information presented is a simplified representation of complex neurobiological processes and should not replace consultation with a licensed healthcare or mental health professional[cite: 1].
+        <strong>Disclaimer:</strong> This self-report tool is intended for psychoeducational and preliminary tracking purposes only[cite: 1, 2]. It does not constitute medical advice, diagnosis, or treatment[cite: 1]. Scores should be interpreted with a licensed healthcare or mental health professional[cite: 1].
       </div>
     </div>
   </div>
 
   <script>
-    const QUESTIONS = [
+    // PART 1 DATA (Exact Items 1 to 58)
+    const CHECKLIST_DATA = [
       {
-        id: 1,
-        category: 'Obsessions',
-        title: 'Time Occupied by Obsessive Thoughts',
-        description: 'How much time is occupied by intrusive or obsessive thoughts?',
-        options: [
-          { value: 0, label: 'None', desc: '0 hrs/day' },
-          { value: 1, label: 'Mild', desc: 'Less than 1 hr/day' },
-          { value: 2, label: 'Moderate', desc: '1 to 3 hrs/day' },
-          { value: 3, label: 'Severe', desc: '3 to 8 hrs/day' },
-          { value: 4, label: 'Extreme', desc: 'Greater than 8 hrs/day' }
+        category: "AGGRESSIVE OBSESSIONS",
+        items: [
+          { id: 1, text: "I fear I might harm myself", ex: "Fear of eating with a knife or fork, fear of handling sharp objects, fear of walking near glass windows" },
+          { id: 2, text: "I fear I might harm other people", ex: "Fear of poisoning other people's food, fear of harming babies, fear of pushing someone in front of a train" },
+          { id: 3, text: "I have violent or horrific images in my mind", ex: "Images of murder, dismembered bodies, or other disgusting scenes" },
+          { id: 4, text: "I fear I will blurt out obscenities", ex: "Fear of shouting obscenities in public situations like church or class, fear of writing obscenities" },
+          { id: 5, text: "I fear doing something embarrassing", ex: "Fear of appearing foolish in social situations" },
+          { id: 6, text: "I fear I will act on an unwanted impulse", ex: "Fear of driving a car into a tree, fear of running someone over, fear of stabbing a friend" },
+          { id: 7, text: "I fear I will steal things", ex: "Fear of 'cheating' a cashier, fear of shoplifting inexpensive items" },
+          { id: 8, text: "I fear that I'll harm others because I'm not careful enough", ex: "Fear of causing an accident without being aware of it (such as a hit-and-run accident)" },
+          { id: 9, text: "I fear I'll be responsible for something else terrible happening", ex: "Fear of causing a fire or burglary because of not being careful enough in checking the house" }
         ]
       },
       {
-        id: 2,
-        category: 'Obsessions',
-        title: 'Interference due to Obsessive Thoughts',
-        description: 'How much do your obsessive thoughts interfere with daily life and functioning?',
-        options: [
-          { value: 0, label: 'None', desc: 'No interference' },
-          { value: 1, label: 'Mild', desc: 'Slight interference, manageable' },
-          { value: 2, label: 'Moderate', desc: 'Definite interference with getting things done' },
-          { value: 3, label: 'Severe', desc: 'Substantial impairment' },
-          { value: 4, label: 'Extreme', desc: 'Incapacitating' }
+        category: "CONTAMINATION OBSESSIONS",
+        items: [
+          { id: 10, text: "I am concerned or disgusted with bodily waste or secretions", ex: "Fear of contracting AIDS, cancer, or other diseases from public rest rooms; saliva, urine, feces" },
+          { id: 11, text: "I am concerned with dirt or germs", ex: "Fear of picking up germs from sitting in certain chairs, shaking hands, or touching door handles" },
+          { id: 12, text: "I am excessively concerned with environmental contaminants", ex: "Fear of asbestos, radon, radioactive substances, or toxic waste sites" },
+          { id: 13, text: "I am excessively concerned with certain household cleansers", ex: "Fear of poisonous kitchen or bathroom cleansers, solvents, insect spray" },
+          { id: 14, text: "I am excessively concerned with animals", ex: "Fear of being contaminated by touching an insect, dog, cat, or other animal" },
+          { id: 15, text: "I am bothered by sticky substances or residues", ex: "Fear of adhesive tape or other sticky substances that may trap contaminants" },
+          { id: 16, text: "I am concerned that I will get ill because of contamination", ex: "Fear of getting ill as a direct result of being contaminated" },
+          { id: 17, text: "I am concerned that I will contaminate others", ex: "Fear of touching other people or preparing food after touching poisonous substances" }
         ]
       },
       {
-        id: 3,
-        category: 'Obsessions',
-        title: 'Distress Associated with Obsessive Thoughts',
-        description: 'How much distress or inner tension do your obsessive thoughts cause?',
-        options: [
-          { value: 0, label: 'None', desc: 'No distress' },
-          { value: 1, label: 'Mild', desc: 'Infrequent, not troubling' },
-          { value: 2, label: 'Moderate', desc: 'Frequent, disturbing, but manageable' },
-          { value: 3, label: 'Severe', desc: 'Very disturbing, frequent' },
-          { value: 4, label: 'Extreme', desc: 'Near constant, disabling distress' }
+        category: "SEXUAL OBSESSIONS",
+        items: [
+          { id: 18, text: "I have forbidden or perverse sexual thoughts, images, or impulses", ex: "Unwanted sexual thoughts about strangers, family, or friends" },
+          { id: 19, text: "I have sexual obsessions that involve children or incest", ex: "Unwanted thoughts about sexually molesting children or family members" },
+          { id: 20, text: "I have obsessions about homosexuality", ex: "Worries like 'Am I homosexual?' when there is no basis for these thoughts" },
+          { id: 21, text: "I have obsessions about aggressive sexual behavior toward other people", ex: "Unwanted images of violent sexual behavior toward adult strangers, friends, or family" }
         ]
       },
       {
-        id: 4,
-        category: 'Obsessions',
-        title: 'Resistance against Obsessions',
-        description: 'How much effort do you make to redirect or resist obsessive thoughts?',
-        options: [
-          { value: 0, label: 'Always Resist', desc: 'Effort is always made to redirect' },
-          { value: 1, label: 'Much Resistance', desc: 'Tries to redirect most of the time' },
-          { value: 2, label: 'Some Resistance', desc: 'Makes some effort to redirect' },
-          { value: 3, label: 'Yields to All', desc: 'Yields without attempt to control' },
-          { value: 4, label: 'Completely Yields', desc: 'Completely yields to all thoughts' }
+        category: "HOARDING/SAVING OBSESSIONS",
+        items: [
+          { id: 22, text: "I have obsessions about hoarding or saving things", ex: "Worries about throwing away seemingly unimportant things that you might need in the future" }
         ]
       },
       {
-        id: 5,
-        category: 'Obsessions',
-        title: 'Control over Obsessive Thoughts',
-        description: 'How much control do you have over redirecting your obsessive thoughts?',
-        options: [
-          { value: 0, label: 'Complete Control', desc: 'Can dismiss thoughts easily' },
-          { value: 1, label: 'Much Control', desc: 'Can divert attention with effort' },
-          { value: 2, label: 'Moderate Control', desc: 'Can divert attention with difficulty' },
-          { value: 3, label: 'Little Control', desc: 'Rarely successful in diverting' },
-          { value: 4, label: 'No Control', desc: 'Involuntary, unable to divert' }
+        category: "RELIGIOUS OBSESSIONS",
+        items: [
+          { id: 23, text: "I am concerned with sacrilege and blasphemy", ex: "Worries about having blasphemous thoughts, saying blasphemous things, or being punished" },
+          { id: 24, text: "I am excessively concerned with morality", ex: "Worries about always doing 'the right thing,' having told a lie, or having cheated someone" }
         ]
       },
       {
-        id: 6,
-        category: 'Compulsions',
-        title: 'Time Spent Performing Compulsive Behaviors',
-        description: 'How much time do you spend performing compulsive behaviors or rituals?',
-        options: [
-          { value: 0, label: 'None', desc: '0 hrs/day' },
-          { value: 1, label: 'Mild', desc: 'Less than 1 hr/day' },
-          { value: 2, label: 'Moderate', desc: '1 to 3 hrs/day' },
-          { value: 3, label: 'Severe', desc: '3 to 8 hrs/day' },
-          { value: 4, label: 'Extreme', desc: 'Greater than 8 hrs/day' }
+        category: "OBSESSION WITH NEED FOR SYMMETRY OR EXACTNESS",
+        items: [
+          { id: 25, text: "I have obsessions about symmetry or exactness", ex: "Worries about papers and books being properly aligned, handwriting being perfect" }
         ]
       },
       {
-        id: 7,
-        category: 'Compulsions',
-        title: 'Interference due to Compulsive Behaviors',
-        description: 'How much do compulsive behaviors interfere with daily activities?',
-        options: [
-          { value: 0, label: 'None', desc: 'No interference' },
-          { value: 1, label: 'Mild', desc: 'Slight interference, manageable' },
-          { value: 2, label: 'Moderate', desc: 'Definite interference with performance' },
-          { value: 3, label: 'Severe', desc: 'Substantial impairment' },
-          { value: 4, label: 'Extreme', desc: 'Incapacitating' }
+        category: "MISCELLANEOUS OBSESSIONS",
+        items: [
+          { id: 26, text: "I feel that I need to know or remember certain things", ex: "Belief that you need to remember insignificant things like license plate numbers" },
+          { id: 27, text: "I fear saying certain things", ex: "Fear of saying certain words because of superstitions" },
+          { id: 28, text: "I fear not saying just the right thing", ex: "Fear of having said the wrong thing, fear of not using the 'perfect' word" },
+          { id: 29, text: "I fear losing things", ex: "Worries about losing a wallet or unimportant scrap paper" },
+          { id: 30, text: "I am bothered by intrusive (neutral) mental images", ex: "Random, unwanted images in your mind" },
+          { id: 31, text: "I am bothered by intrusive mental nonsense sounds, words or music", ex: "Words, songs, or music in your mind that you can't stop" },
+          { id: 32, text: "I am bothered by certain sounds or noises", ex: "Worries about clocks ticking loudly or distant voices" },
+          { id: 33, text: "I have lucky and unlucky numbers", ex: "Worries about common numbers (like 13)" },
+          { id: 34, text: "Certain colors have special significance to me", ex: "Fear of using objects of certain colors" },
+          { id: 35, text: "I have superstitious fears", ex: "Fear of passing a cemetery, hearse, or black cat" }
         ]
       },
       {
-        id: 8,
-        category: 'Compulsions',
-        title: 'Distress if Compulsions Prevented',
-        description: 'How anxious or distressed would you feel if prevented from performing compulsions?',
-        options: [
-          { value: 0, label: 'None', desc: 'No anxiety' },
-          { value: 1, label: 'Mild', desc: 'Slight anxiety, easily managed' },
-          { value: 2, label: 'Moderate', desc: 'Moderate, manageable anxiety' },
-          { value: 3, label: 'Severe', desc: 'Prominent and disturbing anxiety' },
-          { value: 4, label: 'Extreme', desc: 'Disabling anxiety' }
+        category: "SOMATIC OBSESSIONS",
+        items: [
+          { id: 36, text: "I am concerned with illness or disease", ex: "Worries that you have cancer or heart disease despite doctor reassurances" },
+          { id: 37, text: "I am excessively concerned with a part of my body or appearance", ex: "Worries that your face, ears, or nose is hideous or ugly" }
         ]
       },
       {
-        id: 9,
-        category: 'Compulsions',
-        title: 'Resistance against Compulsions',
-        description: 'How much effort do you make to resist or delay performing compulsions?',
-        options: [
-          { value: 0, label: 'Always Resist', desc: 'Effort is always made to resist' },
-          { value: 1, label: 'Much Resistance', desc: 'Tries to resist most of the time' },
-          { value: 2, label: 'Some Resistance', desc: 'Makes some effort to resist' },
-          { value: 3, label: 'Yields to All', desc: 'Yields without attempt to control' },
-          { value: 4, label: 'Completely Yields', desc: 'Completely yields to all compulsions' }
+        category: "CLEANING/WASHING COMPULSIONS",
+        items: [
+          { id: 38, text: "I wash my hands excessively or in a ritualized way", ex: "Washing hands many times a day or for long periods" },
+          { id: 39, text: "I have excessive or ritualized showering, bathing, or grooming routines", ex: "Taking showers that last for several hours" },
+          { id: 40, text: "I have compulsions that involve cleaning household items", ex: "Excessive cleaning of faucets, toilets, floors, kitchen utensils" },
+          { id: 41, text: "I do other things to prevent or remove contact with contaminants", ex: "Wearing gloves to avoid touching garbage or gas pumps" }
         ]
       },
       {
-        id: 10,
-        category: 'Compulsions',
-        title: 'Control over Compulsive Behaviors',
-        description: 'How strong is the drive to perform compulsive behaviors?',
-        options: [
-          { value: 0, label: 'Complete Control', desc: 'Full control over behavior' },
-          { value: 1, label: 'Much Control', desc: 'Can delay behavior with effort' },
-          { value: 2, label: 'Moderate Control', desc: 'Can delay only with great difficulty' },
-          { value: 3, label: 'Little Control', desc: 'Rarely able to delay behavior' },
-          { value: 4, label: 'No Control', desc: 'Involuntary drive to perform' }
+        category: "CHECKING COMPULSIONS",
+        items: [
+          { id: 42, text: "I check that I did not harm others", ex: "Checking that you haven't hurt someone without knowing it" },
+          { id: 43, text: "I check that I did not harm myself", ex: "Looking for injuries or bleeding after handling sharp objects" },
+          { id: 44, text: "I check that nothing terrible happened", ex: "Searching the newspaper or listening to news about catastrophes" },
+          { id: 45, text: "I check that I did not make a mistake", ex: "Repeated checking of door locks, stoves, electrical outlets, or reading/writing" },
+          { id: 46, text: "I check some aspect of my physical condition", ex: "Repeatedly taking pulse, blood pressure, or checking mirror for ugly features" }
+        ]
+      },
+      {
+        category: "REPEATING RITUALS, COUNTING, ORDERING, & HOARDING",
+        items: [
+          { id: 47, text: "I reread or rewrite things", ex: "Taking hours to read a few pages or searching for a 'perfect' word" },
+          { id: 48, text: "I need to repeat routine activities", ex: "Going in and out of a doorway or turning appliances on and off" },
+          { id: 49, text: "I have counting compulsions", ex: "Counting tiles, nails in a wall, or counting while washing" },
+          { id: 50, text: "I have ordering or arranging compulsions", ex: "Straightening items on a desktop or bookcase in exact order" },
+          { id: 51, text: "I have compulsions to hoard or collect things", ex: "Saving old wrappers, paper towels, or empty bottles" }
+        ]
+      },
+      {
+        category: "MISCELLANEOUS COMPULSIONS",
+        items: [
+          { id: 52, text: "I have mental rituals", ex: "Saying prayers or thinking a 'good' thought to undo a 'bad' thought" },
+          { id: 53, text: "I need to tell, ask, or confess", ex: "Asking people for reassurance or confessing wrong behaviors you didn't do" },
+          { id: 54, text: "I need to touch, tap, or rub things", ex: "Urges to touch rough or hot surfaces or lightly touch people" },
+          { id: 55, text: "I take measures to prevent harm or terrible consequences", ex: "Staying away from knives, scissors, or fragile glass" },
+          { id: 56, text: "I have ritualized eating behaviors", ex: "Arranging food/fork in strict order before eating" },
+          { id: 57, text: "I have superstitious behaviors", ex: "Avoiding buses with number 13 or staying inside on the 13th" },
+          { id: 58, text: "I pull my hair out (trichotillomania)", ex: "Pulling hair from scalp, eyelashes, or eyebrows" }
         ]
       }
     ];
 
-    let state = QUESTIONS.reduce((acc, q) => ({ ...acc, [q.id]: 0 }), {});
+    // PART 2 DATA (Questions 1 to 11)
+    const PART2_DATA = [
+      {
+        id: 1,
+        title: "1. Time Occupied by Obsessive Thoughts",
+        prompt: "How much of your time was occupied by obsessive thoughts? How frequently did these thoughts occur?",
+        category: "obs",
+        options: [
+          { val: 0, text: "0 = None" },
+          { val: 1, text: "1 = Less than 1 hour per day, or occasional intrusions (occur no more than 8 times a day)" },
+          { val: 2, text: "2 = 1 to 3 hours per day, or frequent intrusions (most hours of the day are free of obsessions)" },
+          { val: 3, text: "3 = More than 3 hours and up to 8 hours per day, or very frequent intrusions" },
+          { val: 4, text: "4 = More than 8 hours per day, or near-constant intrusions" }
+        ]
+      },
+      {
+        id: 2,
+        title: "2. Interference due to Obsessive Thoughts",
+        prompt: "How much did these thoughts interfere with your social or work functioning? Is there anything that you didn't do because of them?",
+        category: "obs",
+        options: [
+          { val: 0, text: "0 = No interference" },
+          { val: 1, text: "1 = Mild, slight interference with social or occupational performance, but performance not impaired" },
+          { val: 2, text: "2 = Moderate, definitive interference with social or occupational performance, but still manageable" },
+          { val: 3, text: "3 = Severe interference, causes substantial impairment in social or occupational performance" },
+          { val: 4, text: "4 = Extreme, incapacitating interference" }
+        ]
+      },
+      {
+        id: 3,
+        title: "3. Distress Associated with Obsessive Thoughts",
+        prompt: "How much distress did your obsessive thoughts cause you?",
+        category: "obs",
+        options: [
+          { val: 0, text: "0 = None" },
+          { val: 1, text: "1 = Mild, infrequent, and not too disturbing distress" },
+          { val: 2, text: "2 = Moderate, frequent, and disturbing distress, but still manageable" },
+          { val: 3, text: "3 = Severe, very frequent, and very disturbing distress" },
+          { val: 4, text: "4 = Extreme, near-constant, and disabling distress" }
+        ]
+      },
+      {
+        id: 4,
+        title: "4. Resistance Against Obsessions",
+        prompt: "How much effort did you make to resist the obsessive thoughts? How often did you try to disregard or turn your attention away?",
+        category: "obs",
+        options: [
+          { val: 0, text: "0 = I made an effort to always resist (or obsessions are minimal)" },
+          { val: 1, text: "1 = I tried to resist most of the time (more than half the time)" },
+          { val: 2, text: "2 = I made some effort to resist" },
+          { val: 3, text: "3 = I allowed all obsessions to fill my mind without attempting to control them, but with reluctance" },
+          { val: 4, text: "4 = I completely and willingly gave in to all obsessions" }
+        ]
+      },
+      {
+        id: 5,
+        title: "5. Degrees of Control Over Obsessive Thoughts",
+        prompt: "How much control did you have over your obsessive thoughts? How successful were you in stopping or diverting your obsessive thinking?",
+        category: "obs",
+        options: [
+          { val: 0, text: "0 = Complete control" },
+          { val: 1, text: "1 = Much control; usually could stop or divert obsessions with some effort" },
+          { val: 2, text: "2 = Moderate control; sometimes could stop or divert obsessions" },
+          { val: 3, text: "3 = Little control; rarely successful in stopping obsessions" },
+          { val: 4, text: "4 = No control; rarely able to even momentarily ignore obsessions" }
+        ]
+      },
+      {
+        id: 6,
+        title: "6. Time Spent Performing Compulsive Behaviors",
+        prompt: "How much time did you spend performing compulsive behaviors? How frequently did you perform compulsions?",
+        category: "comp",
+        options: [
+          { val: 0, text: "0 = None" },
+          { val: 1, text: "1 = Less than 1 hour per day, or occasional performance (no more than 8 times per day)" },
+          { val: 2, text: "2 = 1 to 3 hours per day, or frequent performance (most hours free of compulsions)" },
+          { val: 3, text: "3 = More than 3 hours and up to 8 hours per day, or very frequent performance" },
+          { val: 4, text: "4 = More than 8 hours per day, or near-constant performance" }
+        ]
+      },
+      {
+        id: 7,
+        title: "7. Interference due to Compulsive Behaviors",
+        prompt: "How much did your compulsive behaviors interfere with your social or work functioning?",
+        category: "comp",
+        options: [
+          { val: 0, text: "0 = No interference" },
+          { val: 1, text: "1 = Mild, slight interference with social or occupational activities, but performance not impaired" },
+          { val: 2, text: "2 = Moderate, definite interference with social or occupational performance, but manageable" },
+          { val: 3, text: "3 = Severe interference, substantial impairment in social or occupational performance" },
+          { val: 4, text: "4 = Extreme, incapacitating interference" }
+        ]
+      },
+      {
+        id: 8,
+        title: "8. Distress Associated with Compulsive Behaviors",
+        prompt: "How would you have felt if prevented from performing your compulsions? How anxious would you have become?",
+        category: "comp",
+        options: [
+          { val: 0, text: "0 = Not at all anxious" },
+          { val: 1, text: "1 = Only slightly anxious if compulsions prevented" },
+          { val: 2, text: "2 = Anxiety would mount but remain manageable if compulsions prevented" },
+          { val: 3, text: "3 = Prominent and very disturbing increase in anxiety if compulsions interrupted" },
+          { val: 4, text: "4 = Extreme, incapacitating anxiety from any intervention aimed at reducing compulsions" }
+        ]
+      },
+      {
+        id: 9,
+        title: "9. Resistance Against Compulsions",
+        prompt: "How much effort did you make to resist the compulsions? Or how often did you try to stop the compulsions?",
+        category: "comp",
+        options: [
+          { val: 0, text: "0 = I made effort to always resist (or symptoms were minimal)" },
+          { val: 1, text: "1 = I tried to resist most of the time (more than half the time)" },
+          { val: 2, text: "2 = I made some effort to resist" },
+          { val: 3, text: "3 = I yielded to almost all compulsions without attempting to control them, but with reluctance" },
+          { val: 4, text: "4 = I completely and willingly yielded to all compulsions" }
+        ]
+      },
+      {
+        id: 10,
+        title: "10. Degrees of Control Over Compulsive Behaviors",
+        prompt: "How much control did you have over the compulsive behaviors? How successful were you in stopping the ritual(s)?",
+        category: "comp",
+        options: [
+          { val: 0, text: "0 = I had complete control" },
+          { val: 1, text: "1 = Usually I could stop compulsions or rituals with some effort and willpower" },
+          { val: 2, text: "2 = Sometimes I could stop compulsive behaviors, but only with difficulty" },
+          { val: 3, text: "3 = I could only delay compulsive behaviors, but eventually they had to be carried out" },
+          { val: 4, text: "4 = I was rarely able to even momentarily delay performing compulsive behaviors" }
+        ]
+      },
+      {
+        id: 11,
+        title: "11. Insight into Obsessions and Compulsions",
+        prompt: "Do you think your obsessions or compulsions are reasonable or rational? Would there be anything besides anxiety to worry about if you resisted them?",
+        category: "insight",
+        options: [
+          { val: 0, text: "0 = I think my obsessions or compulsions are unreasonable or excessive" },
+          { val: 1, text: "1 = I think they are unreasonable/excessive, but not completely convinced that they aren't necessary" },
+          { val: 2, text: "2 = I think my obsessions or compulsions may be unreasonable or excessive" },
+          { val: 3, text: "3 = I don't think my obsessions or compulsions are unreasonable or excessive" },
+          { val: 4, text: "4 = I am sure my obsessions or compulsions are reasonable, no matter what anyone says" }
+        ]
+      }
+    ];
 
-    function renderQuestions() {
-      const container = document.getElementById('questions-container');
+    let scores = { 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0 };
+
+    // Render Part 1 Checklist
+    function renderChecklist() {
+      const container = document.getElementById('checklist-container');
       container.innerHTML = '';
 
-      QUESTIONS.forEach(q => {
+      CHECKLIST_DATA.forEach(cat => {
+        const catHeader = document.createElement('div');
+        catHeader.className = 'category-header';
+        catHeader.innerText = cat.category;
+        container.appendChild(catHeader);
+
+        const table = document.createElement('table');
+        table.className = 'checklist-table';
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th style="width: 40px;">#</th>
+              <th>Symptom</th>
+              <th class="check-col">Past</th>
+              <th class="check-col">Curr</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${cat.items.map(item => `
+              <tr>
+                <td style="font-weight: bold; color: var(--grey);">${item.id}</td>
+                <td>
+                  <div><strong>${item.text}</strong></div>
+                  <div class="examples-text">${item.ex}</div>
+                </td>
+                <td class="check-col"><input type="checkbox" name="past_${item.id}"></td>
+                <td class="check-col"><input type="checkbox" name="curr_${item.id}"></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        `;
+        container.appendChild(table);
+      });
+    }
+
+    // Render Part 2 Questions
+    function renderPart2() {
+      const container = document.getElementById('part2-container');
+      container.innerHTML = '';
+
+      PART2_DATA.forEach(q => {
         const card = document.createElement('div');
-        card.className = 'card';
+        card.className = 'part2-question-card';
 
-        const isObs = q.category === 'Obsessions';
-        const badgeClass = isObs ? 'badge-obs' : 'badge-comp';
-
-        let optionsHTML = '';
-        q.options.forEach(opt => {
-          const isSelected = state[q.id] === opt.value;
-          let selectedClass = '';
-          if (isSelected) {
-            selectedClass = isObs ? 'selected-obs' : 'selected-comp';
-          }
-
-          optionsHTML += `
-            <button class="option-btn ${selectedClass}" onclick="selectOption(${q.id}, ${opt.value})">
-              <div class="opt-header">${opt.value} - ${opt.label}</div>
-              <div class="opt-desc">${opt.desc}</div>
-            </button>
-          `;
-        });
+        const optionsHTML = q.options.map(opt => `
+          <label class="option-item ${scores[q.id] === opt.val ? 'selected' : ''}" onclick="selectPart2(${q.id}, ${opt.val})">
+            <input type="radio" name="q_${q.id}" value="${opt.val}" ${scores[q.id] === opt.val ? 'checked' : ''}>
+            <span class="option-text">${opt.text}</span>
+          </label>
+        `).join('');
 
         card.innerHTML = `
-          <div class="card-top">
-            <span class="category-badge ${badgeClass}">Item ${q.id}: ${q.category}</span>
-            <span style="font-size: 0.75rem; color: var(--grey); font-weight: 600;">Score: ${state[q.id]}</span>
-          </div>
-          <h2 class="card-title">${q.title}</h2>
-          <p class="card-desc">${q.description}</p>
-          <div class="options-grid">${optionsHTML}</div>
+          <h2 class="q-title">${q.title}</h2>
+          <p class="q-prompt">${q.prompt}</p>
+          <div class="options-list">${optionsHTML}</div>
         `;
 
         container.appendChild(card);
       });
     }
 
-    function selectOption(id, value) {
-      state[id] = value;
+    function selectPart2(qId, val) {
+      scores[qId] = val;
       updateScores();
-      renderQuestions();
+      renderPart2();
     }
 
     function updateScores() {
-      const obsScore = QUESTIONS.filter(q => q.category === 'Obsessions')
-        .reduce((sum, q) => sum + state[q.id], 0);
+      const obsSubtotal = scores[1] + scores[2] + scores[3] + scores[4] + scores[5];
+      const compSubtotal = scores[6] + scores[7] + scores[8] + scores[9] + scores[10];
+      const totalScore = obsSubtotal + compSubtotal;
 
-      const compScore = QUESTIONS.filter(q => q.category === 'Compulsions')
-        .reduce((sum, q) => sum + state[q.id], 0);
-
-      const totalScore = obsScore + compScore;
-
-      document.getElementById('obs-score').innerHTML = `${obsScore} <span style="font-size: 0.875rem; font-weight: normal; color: #ffffff; opacity: 0.6;">/ 20</span>`;
-      document.getElementById('comp-score').innerHTML = `${compScore} <span style="font-size: 0.875rem; font-weight: normal; color: #ffffff; opacity: 0.6;">/ 20</span>`;
+      document.getElementById('obs-score').innerHTML = `${obsSubtotal} <span style="font-size: 0.8rem; font-weight: normal; color: #ffffff; opacity: 0.6;">/ 20</span>`;
+      document.getElementById('comp-score').innerHTML = `${compSubtotal} <span style="font-size: 0.8rem; font-weight: normal; color: #ffffff; opacity: 0.6;">/ 20</span>`;
       document.getElementById('total-score').innerHTML = `${totalScore} <span>/ 40</span>`;
 
       const badge = document.getElementById('severity-badge');
       if (totalScore <= 7) {
-        badge.innerText = 'Subclinical / Low Range';
+        badge.innerText = 'Subclinical (0-7)';
         badge.style.backgroundColor = 'var(--green)';
       } else if (totalScore <= 15) {
-        badge.innerText = 'Mild Range';
+        badge.innerText = 'Mild OCD (8-15)';
         badge.style.backgroundColor = 'var(--gold)';
       } else if (totalScore <= 23) {
-        badge.innerText = 'Moderate Range';
+        badge.innerText = 'Moderate OCD (16-23)';
         badge.style.backgroundColor = 'var(--terra)';
       } else if (totalScore <= 31) {
-        badge.innerText = 'Severe Range';
+        badge.innerText = 'Severe OCD (24-31)';
         badge.style.backgroundColor = '#8c5946';
       } else {
-        badge.innerText = 'Extreme Range';
+        badge.innerText = 'Extreme OCD (32-40)';
         badge.style.backgroundColor = 'var(--forest)';
       }
     }
 
-    function resetForm() {
-      state = QUESTIONS.reduce((acc, q) => ({ ...acc, [q.id]: 0 }), {});
-      updateScores();
-      renderQuestions();
-    }
+    // Set today's date automatically
+    document.getElementById('today-date').valueAsDate = new Date();
 
-    // Initial load
-    renderQuestions();
+    // Initial Render
+    renderChecklist();
+    renderPart2();
   </script>
 </body>
 </html>
