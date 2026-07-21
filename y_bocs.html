@@ -166,7 +166,7 @@
 
     @media (min-width: 768px) {
       .summary-card {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(5, 1fr);
         align-items: center;
       }
     }
@@ -203,6 +203,12 @@
       color: var(--gold);
     }
 
+    .stat-val-checklist {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
     .severity-badge {
       display: inline-block;
       margin-top: 0.25rem;
@@ -229,6 +235,20 @@
       border-radius: 0.5rem;
       margin-top: 1.25rem;
       margin-bottom: 0.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .category-count-tag {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--terra);
+      background-color: #ffffff;
+      border: 1px solid var(--stone);
+      padding: 0.1rem 0.5rem;
+      border-radius: 0.25rem;
     }
 
     /* Part Banner Header */
@@ -482,7 +502,7 @@
     <!-- Sticky Live Score Summary -->
     <div class="summary-card">
       <div>
-        <span class="stat-label">Total Severity Score (Items 1-10)</span>
+        <span class="stat-label">Total Severity Score</span>
         <div class="stat-val-main" id="total-score">0 <span>/ 40</span></div>
       </div>
       <div>
@@ -492,6 +512,10 @@
       <div>
         <span class="stat-label">Compulsions Subtotal</span>
         <div class="stat-val-comp" id="comp-score">0 <span style="font-size: 0.85rem; font-weight: normal; color: #ffffff; opacity: 0.6;">/ 20</span></div>
+      </div>
+      <div>
+        <span class="stat-label">Identified Symptoms</span>
+        <div class="stat-val-checklist" id="checklist-count">0 <span style="font-size: 0.85rem; font-weight: normal; color: #ffffff; opacity: 0.6;">items</span></div>
       </div>
       <div style="border-left: 1px solid var(--grey); padding-left: 1rem;">
         <span class="stat-label">Severity Range</span>
@@ -824,10 +848,13 @@
       const container = document.getElementById('checklist-container');
       container.innerHTML = '';
 
-      CHECKLIST_DATA.forEach(cat => {
+      CHECKLIST_DATA.forEach((cat, idx) => {
         const catHeader = document.createElement('div');
         catHeader.className = 'category-header';
-        catHeader.innerText = cat.category;
+        catHeader.innerHTML = `
+          <span>${cat.category}</span>
+          <span class="category-count-tag" id="tag_cat_${idx}">0 Selected</span>
+        `;
         container.appendChild(catHeader);
 
         const table = document.createElement('table');
@@ -850,10 +877,10 @@
                   <div class="examples-text">${item.ex}</div>
                 </td>
                 <td class="check-col">
-                  <input type="checkbox" name="past_${item.id}" onchange="toggleRowHighlight(${item.id})">
+                  <input type="checkbox" name="past_${item.id}" data-cat="${idx}" onchange="toggleRowHighlight(${item.id})">
                 </td>
                 <td class="check-col">
-                  <input type="checkbox" name="curr_${item.id}" onchange="toggleRowHighlight(${item.id})">
+                  <input type="checkbox" name="curr_${item.id}" data-cat="${idx}" onchange="toggleRowHighlight(${item.id})">
                 </td>
               </tr>
             `).join('')}
@@ -873,6 +900,34 @@
       } else {
         row.classList.remove('active-row');
       }
+
+      updateChecklistStats();
+    }
+
+    function updateChecklistStats() {
+      let totalCheckedItems = 0;
+
+      CHECKLIST_DATA.forEach((cat, idx) => {
+        let catCount = 0;
+        cat.items.forEach(item => {
+          const row = document.getElementById(`row_${item.id}`);
+          if (row) {
+            const past = row.querySelector(`input[name="past_${item.id}"]`).checked;
+            const curr = row.querySelector(`input[name="curr_${item.id}"]`).checked;
+            if (past || curr) {
+              catCount++;
+              totalCheckedItems++;
+            }
+          }
+        });
+
+        const tag = document.getElementById(`tag_cat_${idx}`);
+        if (tag) {
+          tag.innerText = `${catCount} Selected`;
+        }
+      });
+
+      document.getElementById('checklist-count').innerHTML = `${totalCheckedItems} <span style="font-size: 0.85rem; font-weight: normal; color: #ffffff; opacity: 0.6;">items</span>`;
     }
 
     // Render Part 2 Questions
